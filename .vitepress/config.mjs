@@ -2,6 +2,7 @@ import { defineConfig } from 'vitepress'
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
+  base: '/summPractice/',
   title: "实践总结",
   description: "这是日常记录的一份文件",
   themeConfig: {
@@ -13,10 +14,10 @@ export default defineConfig({
     ],
     sidebar: {
       '/gitOperation/': [{
-        text: 'git命令',
+        text: '推送',
         items: [
-          { text: 'git', link: '/gitOperation/' },
-          { text: 'git1', link: '/gitOperation/one' }
+          { text: '远程仓库地址设置与推送', link: '/gitOperation/' },
+          { text: '...', link: '/gitOperation/one' }
         ]
       }],
       '/example/': [{
