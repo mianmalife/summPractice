@@ -6,6 +6,7 @@ hero:
   name: "实践总结"
   text: "这是日常记录的一份文件"
   tagline: My great project tagline
+  image: './indexImg.jpg'
   actions:
     - theme: brand
       text: Markdown Examples
