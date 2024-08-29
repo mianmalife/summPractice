@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>dashed</title>
+  <style>
+    * { margin: 0; padding: 0;}
+    .borderCls {
+      margin: 50px;
+      width: 320px;
+      height: 320px;
+      background:
+      linear-gradient(to top, orange, orange), 
+      linear-gradient(to right, orange, orange),
+      linear-gradient(to bottom, orange, orange),
+      linear-gradient(to left, orange, orange);
+      background-size: 100% 2px, 2px 100%;
+      background-position: top left, top right, bottom right, bottom left;
+      background-repeat: no-repeat;
+    }
+    .dashed {
+      margin: 50px;
+      width: 320px;
+      height: 2px;
+      background: linear-gradient(to right, orange 5px, transparent 2.5px, transparent);
+      background-size: 7.5px 100%;
+    }
+    .triangle-t {
+      margin: 50px;
+      width: 0px;
+      height: 0px;
+      border-width: 20px;
+      border-style: solid;
+      border-color: orange transparent transparent transparent;
+    }
+    .triangle-b {
+      margin: 50px;
+      width: 0px;
+      height: 0px;
+      border-width: 20px;
+      border-style: solid;
+      border-color: transparent transparent orange transparent;
+    }
+    .triangle-l {
+      margin: 50px;
+      width: 0px;
+      height: 0px;
+      border-width: 20px;
+      border-style: solid;
+      border-color: transparent transparent transparent orange;
+    }
+    .triangle-dy {
+      margin: 50px;
+      width: 0px;
+      height: 0px;
+      border-width: 30px 10px;
+      border-style: solid;
+      border-color: orange transparent transparent;
+    }
+    .triangle-tx {
+      margin: 50px;
+      width: 15px;
+      height: 15px;
+      border-width: 20px;
+      border-style: solid;
+      border-color: orange transparent transparent;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="borderCls"></div>
+  <div class="dashed"></div>
+  <div class="triangle-t"></div>
+  <div class="triangle-b"></div>
+  <div class="triangle-l"></div>
+  <div class="triangle-dy"></div>
+  <div class="triangle-tx"></div>
+</body>
+</html>

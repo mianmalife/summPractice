@@ -3,8 +3,8 @@
 layout: home
 
 hero:
-  name: "实践总结"
-  text: "这是日常记录的一份文件"
+  name: "随记"
+  text: "这是日常记录的一份清单"
   tagline: My great project tagline
   image: './indexImg.jpg'
   actions:

@@ -5,8 +5,8 @@ export default defineConfig({
   base: '/summPractice/',
   head: [['link', { rel: 'icon', href: '/summPractice/favicon.ico' }]],
   lastUpdated: true,
-  title: "实践总结",
-  description: "这是日常记录的一份文件",
+  title: "随记",
+  description: "这是日常记录的一份清单",
   themeConfig: {
     logo: './logo.png',
     // https://vitepress.dev/reference/default-theme-config
@@ -14,6 +14,7 @@ export default defineConfig({
       { text: 'Home', link: '/' },
       { text: 'Git', link: '/gitOperation/', activeMatch: '/gitOperation/' },
       { text: 'NodeJs', link: '/nodejs/', activeMatch: '/nodejs/' },
+      { text: 'CSS', link: '/css/', activeMatch: '/css/' },
       { text: 'Examples', link: '/example/', activeMatch: '/example/' }
     ],
     sidebar: {
@@ -28,6 +29,13 @@ export default defineConfig({
         text: '基础',
         items: [
           { text: '基础模块', link: '/nodejs/' }
+        ]
+      }],
+      '/css/': [{
+        text: 'css3',
+        items: [
+          { text: 'css3渐变', link: '/css/' },
+          { text: 'border边框', link: '/css/border/'}
         ]
       }],
       '/example/': [{
