@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>docs</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        padding: 10px;
+      }
+
+      .text__li {
+        user-select: none;
+      }
+
+      ul li {
+        line-height: 32px;
+      }
+
+      .add2 {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div>
+      <ul>
+        <li class="text__li">
+          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Possimus
+          optio illo dolores! Magnam repudiandae facere aspernatur nesciunt
+          harum quidem voluptatibus expedita sapiente reprehenderit. Provident
+          ea dolor laudantium temporibus perferendis fugit.
+        </li>
+        <li class="text__li">
+          Minima eligendi excepturi doloremque iste et ipsum! Exercitationem
+          nemo distinctio minus nulla porro esse, velit neque officia aliquam
+          dolores, suscipit odit soluta dolor provident! Illo laudantium aliquid
+          quod tempora id.
+        </li>
+        <li>
+          Quia voluptatum optio eius ipsum, alias totam iste officiis vel
+          quaerat consequatur voluptate soluta fugiat dolore necessitatibus ex
+          delectus porro corrupti voluptatibus aliquam architecto et maxime?
+          Doloremque officia perferendis blanditiis.
+        </li>
+        <li>
+          Voluptates adipisci sequi tenetur nihil, aliquid, sunt non magnam
+          soluta veritatis hic, quibusdam corporis eligendi maxime? Neque
+          temporibus repellendus reiciendis incidunt eveniet tempore, amet odio
+          totam, aspernatur quod molestias ea?
+          <ul>
+            <li>
+              Lorem, ipsum dolor sit amet consectetur adipisicing elit. Expedita
+              nihil alias, eaque non sequi, eius iusto ullam, nam beatae
+              laboriosam harum cum! Hic doloribus fugiat, optio placeat tempore
+              ad maiores?
+            </li>
+            <li>
+              Minima cumque iste, tempora quo quam provident corrupti laborum
+              dolorem iusto id obcaecati qui, ad nulla! Nesciunt, eius maxime at
+              facilis saepe beatae! Corrupti excepturi deserunt, alias aperiam
+              inventore omnis.
+            </li>
+            <li>
+              Fuga iure sapiente consectetur voluptatum minus error libero
+              reiciendis numquam et ut excepturi mollitia culpa veritatis dicta
+              quo quos alias omnis eligendi, eius cum nesciunt quam unde maxime
+              voluptates. Nesciunt!
+            </li>
+            <li>
+              Aperiam quae iure, facilis accusantium similique deserunt nihil
+              incidunt pariatur dolor doloremque ipsa magnam rem velit
+              consectetur voluptate repellat magni maiores cupiditate quis?
+              Similique nam quam vel explicabo hic ad.
+            </li>
+          </ul>
+        </li>
+      </ul>
+      <ul>
+        <li>
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellendus
+          quam itaque deleniti unde labore modi expedita, eaque consequatur
+          illum facere. Odit velit eaque quo consequuntur aspernatur possimus
+          veniam, facere adipisci?
+        </li>
+        <li>
+          Eum sequi laudantium beatae provident aut vitae ea perspiciatis totam.
+          Sequi officia cumque iusto, iste dignissimos magni vel, itaque
+          repellat autem aspernatur ut in sit tempora! Maiores minus nesciunt
+          quo!
+        </li>
+        <li>
+          Quidem aliquam aperiam enim, amet molestias adipisci distinctio
+          exercitationem similique illum est, sint unde iusto numquam quos modi
+          tenetur asperiores nostrum cumque officiis maxime? Optio placeat est
+          illum amet aliquid!
+        </li>
+        <li>
+          Explicabo totam quae voluptatum unde tempora ad veritatis sint?
+          Laboriosam, dolor quis dolorem, ut maiores quisquam magnam
+          voluptatibus doloremque blanditiis officiis nulla non reiciendis
+          temporibus eum. Eius deserunt alias quia.
+        </li>
+      </ul>
+      <ul>
+        <li>
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Temporibus
+          porro perspiciatis repellat quas soluta aut ab reiciendis
+          necessitatibus labore exercitationem! Suscipit quaerat obcaecati
+          expedita quam labore aliquid vero alias pariatur!
+        </li>
+        <li>
+          Fugit saepe esse, enim vel ducimus quam perspiciatis aut pariatur
+          velit provident doloribus doloremque nulla repellendus eum nihil,
+          nesciunt eveniet optio vero ad iusto voluptatem numquam aliquam quo.
+          Fuga, iste?
+        </li>
+        <li>
+          Sunt ducimus porro consectetur ex. Soluta nulla officia exercitationem
+          tempora magnam voluptas similique optio eveniet a, harum nobis
+          quibusdam illo aut modi labore mollitia tempore quod ipsum aperiam
+          expedita! Debitis.
+        </li>
+        <li>
+          Cum nisi qui laborum corrupti facere alias odit consequatur officiis
+          natus laudantium iste veniam quia eius, ducimus laboriosam harum magni
+          officia quod quas exercitationem nobis libero repellendus architecto!
+          Vel, ducimus?
+        </li>
+      </ul>
+    </div>
+    <script>
+      window.onload = function () {
+        let boxElement = document.querySelector("div");
+        // boxElement.childNodes.forEach(item => {
+        //   if (item.nodeType !== Node.TEXT_NODE) {
+        //     loopElement(item)
+        //   }
+        // });
+        function loopElement(ele) {
+          let firstElement = ele.firstElementChild;
+          if (firstElement) {
+            console.log(firstElement, "firstElement...1");
+            return loopElement(firstElement);
+          } else {
+            firstElement = ele.nextElementSibling;
+            if (firstElement) {
+              console.log(firstElement, "firstElement...2");
+              return loopElement(firstElement);
+            }
+          }
+        }
+        const li = document.getElementsByClassName("text__li");
+        console.log(li.item(0));
+        li.item(0).classList.add("add1");
+        li.item(0).classList.add("add2");
+        li.item(0).classList.remove("add1");
+        li.item(0).onclick = function () {
+          this.classList.toggle("add2");
+        };
+        const focusElement = document.activeElement;
+        console.log(
+          focusElement === document.body,
+          document.hasFocus(),
+          document.readyState
+        );
+
+        function filter(node) {
+          return node.tagName.toLowerCase() === "li"
+            ? NodeFilter.FILTER_ACCEPT
+            : NodeFilter.FILTER_SKIP;
+        }
+
+        // 遍历
+        // const nodeIterator = document.createNodeIterator(boxElement, NodeFilter.SHOW_ELEMENT, filter, false)
+        // let node = nodeIterator.nextNode()
+        // while (node !== null) {
+        //   console.log(node)
+        //   node = nodeIterator.nextNode()
+        // }
+        const walker = document.createTreeWalker(
+          boxElement,
+          NodeFilter.SHOW_ELEMENT,
+          filter,
+          false
+        );
+        let node = walker.nextNode();
+        while (node !== null) {
+          console.log(node);
+          node = walker.nextNode();
+        }
+      };
+      // DOM范围
+      // const range1 = document.createRange();
+      // const range2 = document.createRange();
+      // const textLi = document.querySelector(".text__li");
+      // range1.selectNode(textLi)
+      // range2.selectNodeContents(textLi)
+      console.log(document.readyState, document.charset, document.head);
+      // html5新增
+      // document.ElementsByClassName classList  document.activeElement document.hasFocus() document.readyState
+      // scrollIntoView data-*(dataSet)
+    </script>
+  </body>
+</html>

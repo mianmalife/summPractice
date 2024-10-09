@@ -1,16 +1,14 @@
 export function observe(data) {
-  if (typeof data !== 'object' || data === null) return
+  if (typeof data !== 'object' || data === null) return;
   return new Observer(data)
 }
 
 export class Observer {
-  constructor(data) {
-    const keys = Object.keys(data)
-    for (let i = 0; i < keys.length; i++) {
-      const key = keys[i]
-      const value = data[key]
-      defineReactive(data, key, value)
-    }
+  constructor(value) {
+    this.walk(value)
+  }
+  walk(data) {
+    Object.keys(data).forEach(key => defineReactive(data, key, data[key]))
   }
 }
 
@@ -18,13 +16,14 @@ export function defineReactive(obj, key, val) {
   observe(val)
   Object.defineProperty(obj, key, {
     get() {
-      console.log('获取值', obj, key, val)
+      console.log('获取值')
+      return val
     },
     set(newValue) {
       if (newValue === val) return
-      val = newValue
       observe(newValue)
-      console.log('设置值', obj, key, val)
+      val = newValue
+      console.log('设置值')
     }
   })
 }
