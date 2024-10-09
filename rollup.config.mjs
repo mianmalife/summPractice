@@ -1,5 +1,6 @@
 import babel from "@rollup/plugin-babel";
 import resolve from "@rollup/plugin-node-resolve";
+import commonjs from "@rollup/plugin-commonjs";
 
 export default {
   input: "./vue/index.js",
@@ -9,5 +10,5 @@ export default {
     format: 'umd',
     sourcemap: true
   },
-  plugins: [resolve(), babel({ babelHelpers: 'bundled', exclude: ["node_modules/**"] })]
+  plugins: [resolve(), babel({ babelHelpers: 'bundled', exclude: ["node_modules/**"] }), commonjs()]
 }
