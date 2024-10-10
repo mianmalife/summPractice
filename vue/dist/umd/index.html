@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Rollup Bundle</title>
+
+</head>
+
+<body>
+  <script src="vue.js"></script>
+  <script>
+    const vm = new Vue({
+      el: '#app',
+      data() {
+        return {
+          a: [{ a: 1 }]
+        }
+      }
+    })
+    vm._data.a.push({ a: 2 }, 99)
+    vm._data.a.splice(0, 0, 'hello')
+    console.log(vm._data)
+  </script>
+</body>
+
+</html>
