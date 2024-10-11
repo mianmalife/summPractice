@@ -4,23 +4,23 @@ layout: home
 
 hero:
   name: "随记"
-  text: "这是日常记录的一份清单"
-  tagline: My great project tagline
+  text: "这是日常清单"
+  tagline: 记下来才不会忘!
   image: './indexImg.jpg'
   actions:
     - theme: brand
-      text: Markdown Examples
-      link: /example/
+      text: JavaScript基础
+      link: /JavaScript/
     - theme: alt
-      text: API Examples
-      link: /example/api-examples
+      text: JavaScript进阶
+      link: /JavaScript/advanced
 
 features:
-  - title: Feature A
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature B
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature C
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
+  - title: 前端
+    details: 前端
+  - title: 后端
+    details: 后端
+  - title: 其它
+    details: 其它
 ---
 

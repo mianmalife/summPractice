@@ -11,13 +11,29 @@ export default defineConfig({
     logo: './logo.png',
     // https://vitepress.dev/reference/default-theme-config
     nav: [
-      { text: 'Home', link: '/' },
+      { text: '首页', link: '/' },
+      { text: 'Javascript', link: '/JavaScript/', activeMatch: '/JavaScript/' },
       { text: 'Git', link: '/gitOperation/', activeMatch: '/gitOperation/' },
       { text: 'NodeJs', link: '/nodejs/', activeMatch: '/nodejs/' },
       { text: 'CSS', link: '/css/', activeMatch: '/css/' },
       { text: 'Examples', link: '/example/', activeMatch: '/example/' }
     ],
     sidebar: {
+      '/JavaScript/': [
+        {
+          text: '基础',
+          items: [
+            { text: '基础语法', link: '/JavaScript/' },
+          ],
+        },
+        {
+          text: '手写类',
+          items: [
+            { text: '实现继承', link: '/JavaScript/advanced' },
+            { text: '工具函数', link: '/JavaScript/tools' }
+          ],
+        }
+      ],
       '/gitOperation/': [{
         text: '推送',
         items: [
@@ -35,7 +51,7 @@ export default defineConfig({
         text: 'css3',
         items: [
           { text: 'css3渐变', link: '/css/' },
-          { text: 'border边框', link: '/css/border/'}
+          { text: 'border边框', link: '/css/border' }
         ]
       }],
       '/example/': [{
