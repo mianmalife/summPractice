@@ -29,3 +29,9 @@ console.log(child.onPlay(), child.print(), child.name, child.age)
 for (key in child) {
   console.log(key)
 }
+
+let fool
+while (fool = true) {
+  console.log('_________')
+  break
+}

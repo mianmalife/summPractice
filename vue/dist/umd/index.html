@@ -8,18 +8,20 @@
 </head>
 
 <body>
+  <div id="app">vue is fine
+    <div id="n1">{{a}} <span>word</span></div>
+  </div>
   <script src="vue.js"></script>
   <script>
     const vm = new Vue({
       el: '#app',
       data() {
         return {
-          a: [{ a: 1 }]
+          a: [1, 2, 3, 4],
+          b: 'hello'
         }
       }
     })
-    vm.a.push({ b: 2 }, 99)
-    vm.a[1].b = 36
   </script>
 </body>
 
