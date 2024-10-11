@@ -30,8 +30,8 @@ for (key in child) {
   console.log(key)
 }
 
-let fool
-while (fool = true) {
-  console.log('_________')
-  break
-}
+// let fool
+// while (fool = true) {
+//   console.log('_________')
+//   break
+// }
