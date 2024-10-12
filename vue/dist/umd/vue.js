@@ -3093,12 +3093,16 @@
 	  var qnameCapture = "((?:".concat(ncname, "\\:)?").concat(ncname, ")");
 	  var startTagOpen = new RegExp("^<".concat(qnameCapture));
 	  var startTagClose = /^\s*(\/?)>/;
+	  var endTag = new RegExp("^<\\/".concat(qnameCapture, "[^>]*>"));
 	  parseHtml(template);
 	  function start(tagName, attrs) {
-	    console.log(tagName, attrs);
+	    console.log(tagName, attrs, '开始标签');
+	  }
+	  function end(tagName, attrs) {
+	    console.log(tagName, attrs, '结束标签');
 	  }
 	  function chars(text) {
-	    console.log(text);
+	    console.log(text, '文本');
 	  }
 	  function parseHtml(html) {
 	    while (html) {
@@ -3107,7 +3111,18 @@
 	      if (textEnd == 0) {
 	        // 解析开始标签
 	        var startTagMatch = parseStartTag();
-	        start(startTagMatch.tagName, startTagMatch.attrs);
+	        if (startTagMatch) {
+	          start(startTagMatch.tagName, startTagMatch.attrs);
+	          continue;
+	        }
+	      }
+
+	      // 解析结束标签
+	      var endTagMatch = html.match(endTag);
+	      if (endTagMatch) {
+	        advance(endTagMatch[0].length);
+	        end(endTagMatch[1]);
+	        // parseEndTag(endTagMatch[1])
 	        continue;
 	      }
 	      var text = void 0;
@@ -3118,9 +3133,7 @@
 	      if (text) {
 	        advance(text.length);
 	        chars(text);
-	        console.log(html);
 	      }
-	      break;
 	    }
 	    function advance(n) {
 	      // 截掉已经解析的字符

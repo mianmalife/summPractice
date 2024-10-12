@@ -13,13 +13,15 @@ export function compileToFunctions(template) {
   const ast = parseHtml(template)
 
   function start(tagName, attrs) {
-    console.log(tagName, attrs)
+    console.log(tagName, attrs, '开始标签')
   }
 
-  function end(tagName, attrs) { }
+  function end(tagName, attrs) {
+    console.log(tagName, attrs, '结束标签')
+  }
 
   function chars(text) {
-    console.log(text)
+    console.log(text, '文本')
   }
 
   function parseHtml(html) {
@@ -29,9 +31,21 @@ export function compileToFunctions(template) {
       if (textEnd == 0) {
         // 解析开始标签
         const startTagMatch = parseStartTag()
-        start(startTagMatch.tagName, startTagMatch.attrs)
+        if (startTagMatch) {
+          start(startTagMatch.tagName, startTagMatch.attrs)
+          continue
+        }
+      }
+
+      // 解析结束标签
+      const endTagMatch = html.match(endTag)
+      if (endTagMatch) {
+        advance(endTagMatch[0].length)
+        end(endTagMatch[1])
+        // parseEndTag(endTagMatch[1])
         continue
       }
+
       let text
       if (textEnd > 0) { //是文本
         text = html.substring(0, textEnd)
@@ -39,9 +53,7 @@ export function compileToFunctions(template) {
       if (text) {
         advance(text.length)
         chars(text)
-        console.log(html)
       }
-      break
     }
 
     function advance(n) {
@@ -69,6 +81,11 @@ export function compileToFunctions(template) {
           return match
         }
       }
+    }
+
+    function parseEndTag(tag) {
+      console.log(tag, '结束标签')
+      console.log(html)
     }
   }
 }
