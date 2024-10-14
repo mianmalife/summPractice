@@ -8,7 +8,6 @@ export function parseHtml(html) {
   const startTagOpen = new RegExp(`^<${qnameCapture}`)
   const startTagClose = /^\s*(\/?)>/
   const endTag = new RegExp(`^<\\/${qnameCapture}[^>]*>`)
-  const defaultTagRE = /\{\{((?:.|\r?\n)+?)\}\}/g;
 
   function createAstElement(tagName, attrs) {
     return {
@@ -98,7 +97,7 @@ export function parseHtml(html) {
       let attrs
       // 不是关闭字符 > /> 并且匹配到了属性
       while (!(end = html.match(startTagClose)) && (attrs = html.match(attribute))) {
-        match.attrs = { name: attrs[1], value: attrs[3] || attrs[4] || attrs[5] }
+        match.attrs.push({ name: attrs[1], value: attrs[3] || attrs[4] || attrs[5] })
         advance(attrs[0].length)
       }
       if (end) {
