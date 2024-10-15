@@ -34,7 +34,7 @@ export function defineReactive(obj, key, val) {
   observe(val)
   Object.defineProperty(obj, key, {
     get() {
-      console.log('获取值')
+      // console.log('获取值')
       return val
     },
     set(newValue) {

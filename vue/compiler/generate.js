@@ -1,5 +1,4 @@
 export function generate(el) {
-  console.log(el)
   // <div id="app" style="color:red"> hello {{ name }} <span>hello</span> {{age}} kk</div>
   // render() {
   //   return _c('div',{id:'app',style:{color:'red'}},_v('hello'+_s(name)),
@@ -41,7 +40,6 @@ function gen(node) {
     let match, index;
     while (match = defaultTagRE.exec(text)) {
       index = match.index
-      console.log(index, lastIndex)
       if (index > lastIndex) {
         tokens.push(JSON.stringify(text.slice(lastIndex, index)))
       }

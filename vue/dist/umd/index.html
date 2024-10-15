@@ -8,15 +8,18 @@
 </head>
 
 <body>
-  <div id="app" style="color:red">hello {{ name }} aa {{ msg }} vue<span>hello</span>{{kk}}88</div>
+  <div id="app" style="color:red">
+    hello, {{ info.name }}, age: {{info.age}}
+    <p>hello, {{date}}</p>
+  </div>
   <script src="vue.js"></script>
   <script>
     const vm = new Vue({
       el: '#app',
       data() {
         return {
-          a: [1, 2, 3, 4],
-          b: 'hello'
+          info: { name: 'zhangsan', age: 20 },
+          date: new Date().getFullYear()
         }
       }
     })
