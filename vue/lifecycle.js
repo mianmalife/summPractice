@@ -1,3 +1,4 @@
+import { callHook } from "./util"
 import { patch } from "./vdom/patch"
 
 export function lifecycleMixin(Vue) {
@@ -8,5 +9,7 @@ export function lifecycleMixin(Vue) {
 }
 
 export function mountComponent(vm, el) {
+  callHook(vm, 'beforeMount')
   vm._update(vm._render())
+  callHook(vm, 'mounted')
 }
