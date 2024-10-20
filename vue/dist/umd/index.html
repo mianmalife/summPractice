@@ -9,42 +9,45 @@
 
 <body>
   <div id="app" style="color:red; font-size:18px">
-    hello, {{ info.name }}, age: {{info.age}}
-    <p style="font-weight: 700; color:rgb(104, 84, 123); font-size: 20px;">hello, {{date}}</p>
+    <p style="font-weight: 700; color:rgb(104, 84, 123); font-size: 20px;">hello, {{info.name}}, {{date}}</p>
   </div>
   <script src="vue.js"></script>
   <script>
-    Vue.mixin({
-      created: function a() {
-        console.log('a')
-      }
-    })
-    Vue.mixin({
-      created: function b() {
-        console.log('b')
-      }
-    })
+    // Vue.mixin({
+    //   created: function a() {
+    //     console.log('a')
+    //   }
+    // })
+    // Vue.mixin({
+    //   created: function b() {
+    //     console.log('b')
+    //   }
+    // })
     const vm = new Vue({
       el: '#app',
       data() {
         return {
-          info: { name: 'zhangsan', age: 20 },
-          date: new Date().getFullYear()
+          info: { name: 'zhangsan' },
+          date: 2024
         }
       },
-      beforeCreate() {
-        console.log('beforeCreate')
-      },
-      created: function c() {
-        console.log('c')
-      },
-      beforeMount() {
-        console.log('beforeMount')
-      },
-      mounted() {
-        console.log('mounted')
-      },
+      // beforeCreate() {
+      //   console.log('beforeCreate')
+      // },
+      // created: function c() {
+      //   console.log('c')
+      // },
+      // beforeMount() {
+      //   console.log('beforeMount')
+      // },
+      // mounted() {
+      //   console.log('mounted')
+      // },
     })
+    // vm.info.name = 'wangmaz'
+    // setTimeout(() => {
+    //   vm.info.name = 'MAZI'
+    // }, 2000)
   </script>
 </body>
 
