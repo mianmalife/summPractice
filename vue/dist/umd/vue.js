@@ -4975,6 +4975,7 @@
 	          break;
 	      }
 	      if (inserted) ob.observeArray(inserted);
+	      ob.dep.notify();
 	      return result;
 	    },
 	    enumerable: true,
@@ -4984,13 +4985,14 @@
 	});
 
 	function observe(data) {
-	  if (_typeof(data) !== 'object' || data === null) return data;
-	  if (data.__ob__ instanceof Observer) return data;
+	  if (_typeof(data) !== 'object' || data === null) return;
+	  if (data.__ob__ instanceof Observer) return;
 	  return new Observer(data);
 	}
 	var Observer = /*#__PURE__*/function () {
 	  function Observer(value) {
 	    _classCallCheck(this, Observer);
+	    this.dep = new Dep();
 	    Object.defineProperty(value, '__ob__', {
 	      value: this,
 	      enumerable: false,
@@ -5020,12 +5022,15 @@
 	  }]);
 	}();
 	function defineReactive(obj, key, val) {
-	  observe(val);
+	  var childDep = observe(val);
 	  var dep = new Dep();
 	  Object.defineProperty(obj, key, {
 	    get: function get() {
 	      if (Dep.target) {
 	        dep.depend();
+	        if (childDep) {
+	          childDep.dep.depend();
+	        }
 	      }
 	      return val;
 	    },

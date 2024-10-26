@@ -2,13 +2,14 @@ import { arrayMethods } from "./array";
 import Dep from "./dep";
 
 export function observe(data) {
-  if (typeof data !== 'object' || data === null) return data;
-  if (data.__ob__ instanceof Observer) return data;
+  if (typeof data !== 'object' || data === null) return;
+  if (data.__ob__ instanceof Observer) return;
   return new Observer(data)
 }
 
 export class Observer {
   constructor(value) {
+    this.dep = new Dep()
     Object.defineProperty(value, '__ob__', {
       value: this,
       enumerable: false,
@@ -32,12 +33,15 @@ export class Observer {
 }
 
 export function defineReactive(obj, key, val) {
-  observe(val)
+  let childDep = observe(val)
   let dep = new Dep()
   Object.defineProperty(obj, key, {
     get() {
       if (Dep.target) {
         dep.depend()
+        if (childDep) {
+          childDep.dep.depend()
+        }
       }
       return val
     },
