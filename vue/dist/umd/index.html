@@ -29,9 +29,12 @@
         return {
           info: { name: 'zhangsan' },
           date: 2024,
-          arr: [1,2,3,4]
+          arr: [1,2,3,4],
         }
       },
+      updated() {
+        console.log('updated')
+      }
       // beforeCreate() {
       //   console.log('beforeCreate')
       // },
@@ -48,7 +51,14 @@
     // vm.info.name = 'wangmaz'
     setTimeout(() => {
       vm.arr.push(5)
+      vm.arr.push(5)
+      vm.arr.push(5)
+      vm.arr.push(5)
       vm.info.name = 'lisi'
+      console.log(vm.$el.innerHTML)
+      vm.$nextTick(() => {
+        console.log(vm.$el.innerHTML, 'nextTick')
+      })
     }, 2000)
   </script>
 </body>

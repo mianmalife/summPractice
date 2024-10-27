@@ -1,4 +1,5 @@
 import { popTarget, pushTarget } from "./dep"
+import { nextTick } from "../util";
 
 let id = 0
 class Watcher {
@@ -21,6 +22,9 @@ class Watcher {
     popTarget()
   }
   update() {
+    queueWatcher(this)
+  }
+  run () {
     this.get()
   }
   addDep(dep) {
@@ -29,6 +33,28 @@ class Watcher {
       this.deps.push(dep)
       this.depsId.add(id)
       dep.addSub(this)
+    }
+  }
+}
+
+let queue = [];
+let has = {};
+let pending = false;
+
+function flushSchedulerQueue() {
+  queue.forEach(watcher => {watcher.run();watcher.cb()})
+  queue = []
+  has = {}
+  pending = false
+}
+function queueWatcher(watcher) {
+  const id = watcher.id
+  if (!has[id]) {
+    queue.push(watcher)
+    has[id] = true
+    if (!pending) {
+      nextTick(flushSchedulerQueue)
+      pending = true
     }
   }
 }
