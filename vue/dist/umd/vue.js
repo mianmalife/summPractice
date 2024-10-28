@@ -906,19 +906,19 @@
 	var concat$1 = uncurryThis$l([].concat);
 
 	// all object keys, includes non-enumerable and symbols
-	var ownKeys$1 = getBuiltIn$7('Reflect', 'ownKeys') || function ownKeys(it) {
+	var ownKeys$2 = getBuiltIn$7('Reflect', 'ownKeys') || function ownKeys(it) {
 	  var keys = getOwnPropertyNamesModule$1.f(anObject$e(it));
 	  var getOwnPropertySymbols = getOwnPropertySymbolsModule.f;
 	  return getOwnPropertySymbols ? concat$1(keys, getOwnPropertySymbols(it)) : keys;
 	};
 
 	var hasOwn$6 = hasOwnProperty_1;
-	var ownKeys = ownKeys$1;
+	var ownKeys$1 = ownKeys$2;
 	var getOwnPropertyDescriptorModule = objectGetOwnPropertyDescriptor;
 	var definePropertyModule$2 = objectDefineProperty;
 
 	var copyConstructorProperties$1 = function (target, source, exceptions) {
-	  var keys = ownKeys(source);
+	  var keys = ownKeys$1(source);
 	  var defineProperty = definePropertyModule$2.f;
 	  var getOwnPropertyDescriptor = getOwnPropertyDescriptorModule.f;
 	  for (var i = 0; i < keys.length; i++) {
@@ -2655,7 +2655,6 @@
 	    return childVal;
 	  };
 	  strats.computed = function () {};
-	  strats.watch = function () {};
 	  LIFECYCLE_HOOKS.forEach(function (hook) {
 	    strats[hook] = mergeHook;
 	  });
@@ -2764,6 +2763,14 @@
 	    writable: !1
 	  }), e;
 	}
+	function _defineProperty(e, r, t) {
+	  return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, {
+	    value: t,
+	    enumerable: !0,
+	    configurable: !0,
+	    writable: !0
+	  }) : e[r] = t, e;
+	}
 	function _iterableToArrayLimit(r, l) {
 	  var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"];
 	  if (null != t) {
@@ -2791,6 +2798,27 @@
 	function _nonIterableRest() {
 	  throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 	}
+	function ownKeys(e, r) {
+	  var t = Object.keys(e);
+	  if (Object.getOwnPropertySymbols) {
+	    var o = Object.getOwnPropertySymbols(e);
+	    r && (o = o.filter(function (r) {
+	      return Object.getOwnPropertyDescriptor(e, r).enumerable;
+	    })), t.push.apply(t, o);
+	  }
+	  return t;
+	}
+	function _objectSpread2(e) {
+	  for (var r = 1; r < arguments.length; r++) {
+	    var t = null != arguments[r] ? arguments[r] : {};
+	    r % 2 ? ownKeys(Object(t), !0).forEach(function (r) {
+	      _defineProperty(e, r, t[r]);
+	    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) {
+	      Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
+	    });
+	  }
+	  return e;
+	}
 	function _slicedToArray(r, e) {
 	  return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray(r, e) || _nonIterableRest();
 	}
@@ -2798,11 +2826,11 @@
 	  if ("object" != typeof t || !t) return t;
 	  var e = t[Symbol.toPrimitive];
 	  if (void 0 !== e) {
-	    var i = e.call(t, r);
+	    var i = e.call(t, r || "default");
 	    if ("object" != typeof i) return i;
 	    throw new TypeError("@@toPrimitive must return a primitive value.");
 	  }
-	  return (String )(t);
+	  return ("string" === r ? String : Number)(t);
 	}
 	function _toPropertyKey(t) {
 	  var i = _toPrimitive(t, "string");
@@ -5717,20 +5745,31 @@
 	    this.exprOrFn = exprOrFn;
 	    this.cb = cb;
 	    this.options = options;
+	    this.user = options.user;
 	    this.id = id++;
 	    this.deps = [];
 	    this.depsId = new Set();
 	    if (typeof exprOrFn === 'function') {
 	      this.getter = exprOrFn;
+	    } else {
+	      this.getter = function () {
+	        var exp = exprOrFn.split('.');
+	        var obj = vm;
+	        for (var i = 0; i < exp.length; i++) {
+	          obj = obj[exp[i]];
+	        }
+	        return obj;
+	      };
 	    }
-	    this.get();
+	    this.value = this.get();
 	  }
 	  return _createClass(Watcher, [{
 	    key: "get",
 	    value: function get() {
 	      pushTarget(this);
-	      this.getter();
+	      var result = this.getter();
 	      popTarget();
+	      return result;
 	    }
 	  }, {
 	    key: "update",
@@ -5740,7 +5779,12 @@
 	  }, {
 	    key: "run",
 	    value: function run() {
-	      this.get();
+	      var newValue = this.get();
+	      var oldValue = this.value;
+	      this.value = newValue;
+	      if (this.user) {
+	        this.cb.call(this.vm, newValue, oldValue);
+	      }
 	    }
 	  }, {
 	    key: "addDep",
@@ -5760,7 +5804,9 @@
 	function flushSchedulerQueue() {
 	  queue.forEach(function (watcher) {
 	    watcher.run();
-	    watcher.cb();
+	    if (!watcher.user) {
+	      watcher.cb();
+	    }
 	  });
 	  queue = [];
 	  has = {};
@@ -5837,17 +5883,26 @@
 	}
 
 	var $$3 = _export;
+	var isArray = isArray$6;
+
+	// `Array.isArray` method
+	// https://tc39.es/ecma262/#sec-array.isarray
+	$$3({ target: 'Array', stat: true }, {
+	  isArray: isArray
+	});
+
+	var $$2 = _export;
 	var DESCRIPTORS$2 = descriptors;
 	var defineProperty = objectDefineProperty.f;
 
 	// `Object.defineProperty` method
 	// https://tc39.es/ecma262/#sec-object.defineproperty
 	// eslint-disable-next-line es/no-object-defineproperty -- safe
-	$$3({ target: 'Object', stat: true, forced: Object.defineProperty !== defineProperty, sham: !DESCRIPTORS$2 }, {
+	$$2({ target: 'Object', stat: true, forced: Object.defineProperty !== defineProperty, sham: !DESCRIPTORS$2 }, {
 	  defineProperty: defineProperty
 	});
 
-	var $$2 = _export;
+	var $$1 = _export;
 	var toObject$1 = toObject$9;
 	var nativeKeys = objectKeys$1;
 	var fails = fails$w;
@@ -5856,19 +5911,10 @@
 
 	// `Object.keys` method
 	// https://tc39.es/ecma262/#sec-object.keys
-	$$2({ target: 'Object', stat: true, forced: FAILS_ON_PRIMITIVES }, {
+	$$1({ target: 'Object', stat: true, forced: FAILS_ON_PRIMITIVES }, {
 	  keys: function keys(it) {
 	    return nativeKeys(toObject$1(it));
 	  }
-	});
-
-	var $$1 = _export;
-	var isArray = isArray$6;
-
-	// `Array.isArray` method
-	// https://tc39.es/ecma262/#sec-array.isarray
-	$$1({ target: 'Array', stat: true }, {
-	  isArray: isArray
 	});
 
 	var DESCRIPTORS$1 = descriptors;
@@ -6016,7 +6062,9 @@
 	    initData(vm);
 	  }
 	  if (opts.computed) ;
-	  if (opts.watch) ;
+	  if (opts.watch) {
+	    initWatch(vm);
+	  }
 	}
 	function proxy(vm, data, key) {
 	  Object.defineProperty(vm, key, {
@@ -6036,9 +6084,40 @@
 	  });
 	  observe(data);
 	}
+	function initWatch(vm) {
+	  var watch = vm.$options.watch;
+	  var _loop = function _loop(key) {
+	    var handler = watch[key];
+	    if (Array.isArray(handler)) {
+	      handler.forEach(function (handle) {
+	        createWatcher(vm, key, handle);
+	      });
+	    } else {
+	      createWatcher(vm, key, handler);
+	    }
+	  };
+	  for (var key in watch) {
+	    _loop(key);
+	  }
+	}
+	function createWatcher(vm, exprOrFn, handler, options) {
+	  if (_typeof(handler) === 'object') {
+	    options = handler;
+	    handler = handler.handler;
+	  }
+	  if (typeof handler === 'string') {
+	    handler = vm[handler];
+	  }
+	  return vm.$watch(exprOrFn, handler, options);
+	}
 	function stateMixin(Vue) {
 	  Vue.prototype.$nextTick = function (cb) {
 	    nextTick(cb);
+	  };
+	  Vue.prototype.$watch = function (exprOrFn, handler, options) {
+	    new Watcher(this, exprOrFn, handler, _objectSpread2(_objectSpread2({}, options), {}, {
+	      user: true
+	    }));
 	  };
 	}
 

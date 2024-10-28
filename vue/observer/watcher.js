@@ -8,24 +8,40 @@ class Watcher {
     this.exprOrFn = exprOrFn
     this.cb = cb
     this.options = options
+    this.user = options.user
     this.id = id++
     this.deps = []
     this.depsId = new Set()
     if (typeof exprOrFn === 'function') {
       this.getter = exprOrFn
+    } else {
+      this.getter = function () {
+        const exp = exprOrFn.split('.')
+        let obj = vm
+        for (let i = 0; i < exp.length; i++) {
+          obj = obj[exp[i]]
+        }
+        return obj
+      }
     }
-    this.get()
+    this.value = this.get()
   }
   get() {
     pushTarget(this)
-    this.getter()
+    let result = this.getter()
     popTarget()
+    return result
   }
   update() {
     queueWatcher(this)
   }
   run () {
-    this.get()
+    let newValue = this.get()
+    let oldValue = this.value
+    this.value = newValue
+    if (this.user) {
+      this.cb.call(this.vm, newValue, oldValue)
+    }
   }
   addDep(dep) {
     let id = dep.id
@@ -42,7 +58,12 @@ let has = {};
 let pending = false;
 
 function flushSchedulerQueue() {
-  queue.forEach(watcher => {watcher.run();watcher.cb()})
+  queue.forEach(watcher => {
+    watcher.run();
+    if (!watcher.user) {
+      watcher.cb()
+    }
+  })
   queue = []
   has = {}
   pending = false

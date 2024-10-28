@@ -1,5 +1,6 @@
 import { observe } from "./observer"
 import { nextTick } from "./util";
+import Watcher from "./observer/watcher";
 
 export function initState(vm) {
   const opts = vm.$options
@@ -16,7 +17,7 @@ export function initState(vm) {
     initComputed()
   }
   if (opts.watch) {
-    initWatch()
+    initWatch(vm)
   }
 }
 
@@ -42,10 +43,36 @@ function initData(vm) {
   observe(data)
 }
 function initComputed() { }
-function initWatch() { }
+function initWatch(vm) {
+  let watch = vm.$options.watch
+  for(let key in watch) {
+    let handler = watch[key]
+    if (Array.isArray(handler)) {
+      handler.forEach(handle => {
+          createWatcher(vm, key, handle)
+      })
+    } else {
+      createWatcher(vm, key, handler)
+    }
+  }
+}
+
+function createWatcher(vm, exprOrFn, handler, options) {
+  if (typeof handler === 'object') {
+    options = handler
+    handler = handler.handler
+  }
+  if (typeof handler === 'string') {
+    handler = vm[handler]
+  }
+  return vm.$watch(exprOrFn, handler, options)
+}
 
 export function stateMixin(Vue) {
   Vue.prototype.$nextTick = function(cb) {
     nextTick(cb)
+  }
+  Vue.prototype.$watch = function(exprOrFn, handler, options) {
+    new Watcher(this, exprOrFn, handler, {...options, user: true })
   }
 }

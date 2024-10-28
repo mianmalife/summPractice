@@ -20,12 +20,18 @@
       },
       updated() {
         console.log('updated')
+      },
+      watch: {
+        hello(newValue, oldValue) {
+          console.log(newValue, oldValue)
+        }
       }
     })
     vm.hello = 'heihei'
     vm.$nextTick(() => {
       console.log('nexttick', vm.$el.innerHTML)
     })
+    console.log(vm)
   </script>
 </body>
 
