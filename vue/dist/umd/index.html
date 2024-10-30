@@ -8,9 +8,9 @@
 </head>
 
 <body>
-  <div id="app" style="color:red; font-size:18px">
-    <p style="font-weight: 700; color:rgb(104, 84, 123); font-size: 20px;">hello, {{info.firstName.name}}</p>
-  </div>
+<!--  <div id="app" style="color:red; font-size:18px">-->
+<!--    <p style="font-weight: 700; color:rgb(104, 84, 123); font-size: 20px;">hello, {{info.firstName.name}}</p>-->
+<!--  </div>-->
   <script src="vue.js"></script>
   <script>
     // Vue.mixin({
@@ -23,23 +23,23 @@
     //     console.log('b')
     //   }
     // })
-    const vm = new Vue({
-      el: '#app',
-      data() {
-        return {
-          info: { firstName: {name: 'zhangsan'} },
-        }
-      },
-      watch: {
-        "info.firstName.name": function (newValue, oldValue) {
-          console.log(newValue, oldValue)
-        }
-      }
-    })
-    vm.info.firstName.name = 'lisi'
-    setTimeout(() => {
-      vm.info.firstName.name = 'wmz'
-    }, 1000)
+    // const vm = new Vue({
+    //   el: '#app',
+    //   data() {
+    //     return {
+    //       info: { firstName: {name: 'zhangsan'} },
+    //     }
+    //   },
+    //   watch: {
+    //     "info.firstName.name": function (newValue, oldValue) {
+    //       console.log(newValue, oldValue)
+    //     }
+    //   }
+    // })
+    // vm.info.firstName.name = 'lisi'
+    // setTimeout(() => {
+    //   vm.info.firstName.name = 'wmz'
+    // }, 1000)
   </script>
 </body>
 
