@@ -20,10 +20,10 @@ initGlobalApi(Vue)
 let vm1 = new Vue({data() { return {name: 'zhangsan'} }})
 let render1 = compileToFunctions(`<div id="app" class="a" style="color:red;font-weight:bold">
 <ul>
-<li style="color:red">1</li>
-<li style="color:orange">2</li>
-<li style="color:yellow">3</li>
-<li style="color:green">{{name}}</li>
+<li style="color:red" key="11">1</li>
+<li style="color:orange" key="22">2</li>
+<li style="color:yellow" key="33">3</li>
+<li style="color:green" key="44">{{name}}</li>
 </ul>
 </div>`)
 let oldVNode = render1.call(vm1)
@@ -33,10 +33,10 @@ document.body.appendChild(el)
 let vm2 = new Vue({data() { return {name: 'lisi'} }})
 let render2 = compileToFunctions(`<div id="app" class="a" style="color:green;">
 <ul>
-<li style="color:green">{{name}}</li>
-<li style="color:yellow">3</li>
-<li style="color:orange">2</li>
-<li style="color:red">1</li>
+<li style="color:green" key="66">{{name}}</li>
+<li style="color:red" key="11">1</li>
+<li style="color:yellow" key="33">3</li>
+<li style="color:orange" key="22">2</li>
 </ul>
 </div>`)
 let newVNode = render2.call(vm2)

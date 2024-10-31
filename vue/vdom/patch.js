@@ -47,8 +47,21 @@ function updateChildren(oldChildren, newChildren, parent) {
   let newEndIndex = newChildren.length - 1
   let newEndVnode = newChildren[newEndIndex]
 
+  function makeIndexByKey(children) {
+    let map = {}
+    children.forEach((item, index) => {
+      map[item.key] = index
+    })
+    return map
+  }
+  let map = makeIndexByKey(oldChildren)
   while (oldStartIndex <= oldEndIndex && newStartIndex <= newEndIndex) {
-    if(isSameVnode(oldStartVnode, newStartVnode)) {
+    if (!oldStartVnode) {
+      oldStartVnode = oldChildren[++oldStartIndex]
+    } else if (!oldEndVnode) {
+      oldEndVnode = oldChildren[--oldEndIndex]
+    }
+    else if(isSameVnode(oldStartVnode, newStartVnode)) {
       patch(oldStartVnode, newStartVnode)
       oldStartVnode = oldChildren[++oldStartIndex]
       newStartVnode = newChildren[++newStartIndex]
@@ -66,12 +79,32 @@ function updateChildren(oldChildren, newChildren, parent) {
       parent.insertBefore(oldEndVnode.el, oldStartVnode.el)
       oldEndVnode = oldChildren[--oldEndIndex]
       newStartVnode = newChildren[++newStartIndex]
+    } else {
+      let moveIndex = map[newStartVnode.key]
+      if (moveIndex == undefined) {
+        parent.insertBefore(createElm(newStartVnode), oldStartVnode.el)
+      } else {
+        let moveVNode = oldChildren[moveIndex]
+        oldChildren[moveIndex] = null
+        parent.insertBefore(moveVNode.el, oldStartVnode.el)
+        patch(moveVNode, newStartVnode)
+      }
+      newStartVnode = newChildren[++newStartIndex]
     }
   }
   if (newStartIndex <= newEndIndex) {
     for(let i = newStartIndex; i <= newEndIndex; i++) {
       let el = newChildren[newEndIndex + 1] == null ? null : newChildren[newEndIndex+1].el
       parent.insertBefore(createElm(newChildren[i]), el)
+    }
+  }
+
+  if (oldStartIndex <= oldEndIndex) {
+    for(let i = oldStartIndex; i <= oldEndIndex; i++) {
+      let child = oldChildren[i]
+      if (child != undefined) {
+        parent.removeChild(child.el)
+      }
     }
   }
 

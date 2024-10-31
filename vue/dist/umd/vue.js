@@ -5869,8 +5869,20 @@
 	  var newStartVnode = newChildren[0];
 	  var newEndIndex = newChildren.length - 1;
 	  var newEndVnode = newChildren[newEndIndex];
+	  function makeIndexByKey(children) {
+	    var map = {};
+	    children.forEach(function (item, index) {
+	      map[item.key] = index;
+	    });
+	    return map;
+	  }
+	  var map = makeIndexByKey(oldChildren);
 	  while (oldStartIndex <= oldEndIndex && newStartIndex <= newEndIndex) {
-	    if (isSameVnode(oldStartVnode, newStartVnode)) {
+	    if (!oldStartVnode) {
+	      oldStartVnode = oldChildren[++oldStartIndex];
+	    } else if (!oldEndVnode) {
+	      oldEndVnode = oldChildren[--oldEndIndex];
+	    } else if (isSameVnode(oldStartVnode, newStartVnode)) {
 	      patch(oldStartVnode, newStartVnode);
 	      oldStartVnode = oldChildren[++oldStartIndex];
 	      newStartVnode = newChildren[++newStartIndex];
@@ -5888,12 +5900,31 @@
 	      parent.insertBefore(oldEndVnode.el, oldStartVnode.el);
 	      oldEndVnode = oldChildren[--oldEndIndex];
 	      newStartVnode = newChildren[++newStartIndex];
+	    } else {
+	      var moveIndex = map[newStartVnode.key];
+	      if (moveIndex == undefined) {
+	        parent.insertBefore(createElm(newStartVnode), oldStartVnode.el);
+	      } else {
+	        var moveVNode = oldChildren[moveIndex];
+	        oldChildren[moveIndex] = null;
+	        parent.insertBefore(moveVNode.el, oldStartVnode.el);
+	        patch(moveVNode, newStartVnode);
+	      }
+	      newStartVnode = newChildren[++newStartIndex];
 	    }
 	  }
 	  if (newStartIndex <= newEndIndex) {
 	    for (var i = newStartIndex; i <= newEndIndex; i++) {
 	      var el = newChildren[newEndIndex + 1] == null ? null : newChildren[newEndIndex + 1].el;
 	      parent.insertBefore(createElm(newChildren[i]), el);
+	    }
+	  }
+	  if (oldStartIndex <= oldEndIndex) {
+	    for (var _i = oldStartIndex; _i <= oldEndIndex; _i++) {
+	      var child = oldChildren[_i];
+	      if (child != undefined) {
+	        parent.removeChild(child.el);
+	      }
 	    }
 	  }
 	}
@@ -6279,7 +6310,7 @@
 	    };
 	  }
 	});
-	var render1 = compileToFunctions("<div id=\"app\" class=\"a\" style=\"color:red;font-weight:bold\">\n<ul>\n<li style=\"color:red\">1</li>\n<li style=\"color:orange\">2</li>\n<li style=\"color:yellow\">3</li>\n<li style=\"color:green\">{{name}}</li>\n</ul>\n</div>");
+	var render1 = compileToFunctions("<div id=\"app\" class=\"a\" style=\"color:red;font-weight:bold\">\n<ul>\n<li style=\"color:red\" key=\"11\">1</li>\n<li style=\"color:orange\" key=\"22\">2</li>\n<li style=\"color:yellow\" key=\"33\">3</li>\n<li style=\"color:green\" key=\"44\">{{name}}</li>\n</ul>\n</div>");
 	var oldVNode = render1.call(vm1);
 	var el = createElm(oldVNode);
 	document.body.appendChild(el);
@@ -6290,7 +6321,7 @@
 	    };
 	  }
 	});
-	var render2 = compileToFunctions("<div id=\"app\" class=\"a\" style=\"color:green;\">\n<ul>\n<li style=\"color:green\">{{name}}</li>\n<li style=\"color:yellow\">3</li>\n<li style=\"color:orange\">2</li>\n<li style=\"color:red\">1</li>\n</ul>\n</div>");
+	var render2 = compileToFunctions("<div id=\"app\" class=\"a\" style=\"color:green;\">\n<ul>\n<li style=\"color:green\" key=\"66\">{{name}}</li>\n<li style=\"color:red\" key=\"11\">1</li>\n<li style=\"color:yellow\" key=\"33\">3</li>\n<li style=\"color:orange\" key=\"22\">2</li>\n</ul>\n</div>");
 	var newVNode = render2.call(vm2);
 	setTimeout(function () {
 	  patch(oldVNode, newVNode);
