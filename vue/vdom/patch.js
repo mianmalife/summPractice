@@ -6,6 +6,7 @@ export function patch(oldVnode, vnode) {
     parentElm.removeChild(oldVnode)
     return el
   } else {
+    let el= vnode.el = oldVnode.el
     if (oldVnode.tag !== vnode.tag) {
       return oldVnode.el.parentNode.replaceChild(createElm(vnode), oldVnode.el)
     }
@@ -15,7 +16,6 @@ export function patch(oldVnode, vnode) {
         return oldVnode.el.textContent = vnode.text
       }
     }
-    let el= vnode.el = oldVnode.el
     updateProperties(vnode, oldVnode.data)
     let oldChildren = oldVnode.children || []
     let newChildren = vnode.children || []
@@ -50,7 +50,9 @@ function updateChildren(oldChildren, newChildren, parent) {
   function makeIndexByKey(children) {
     let map = {}
     children.forEach((item, index) => {
-      map[item.key] = index
+      if (item.key) {
+        map[item.key] = index
+      }
     })
     return map
   }

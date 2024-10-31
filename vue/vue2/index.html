@@ -28,9 +28,9 @@
       }
     })
     vm.hello = 'heihei'
-    vm.$nextTick(() => {
-      console.log('nexttick', vm.$el.innerHTML)
-    })
+      setTimeout(() => {
+        vm.hello = 'HAHA'
+      }, 2000)
     console.log(vm)
   </script>
 </body>

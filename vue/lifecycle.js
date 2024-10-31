@@ -5,7 +5,13 @@ import { patch } from "./vdom/patch"
 export function lifecycleMixin(Vue) {
   Vue.prototype._update = function (vnode) {
     const vm = this
-    vm.$el = patch(vm.$el, vnode)
+    const prevVNode = vm._vnode
+    vm._vnode = vnode
+    if (!prevVNode) {
+      vm.$el = patch(vm.$el, vnode)
+    } else {
+      vm.$el = patch(prevVNode, vnode)
+    }
   }
 }
 
