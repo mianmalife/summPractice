@@ -2654,7 +2654,6 @@
 	  strats.data = function (parentVal, childVal) {
 	    return childVal;
 	  };
-	  strats.computed = function () {};
 	  LIFECYCLE_HOOKS.forEach(function (hook) {
 	    strats[hook] = mergeHook;
 	  });
@@ -5730,11 +5729,14 @@
 	  }]);
 	}();
 	Dep.target = null;
+	var stack = [];
 	function pushTarget(watcher) {
 	  Dep.target = watcher;
+	  stack.push(watcher);
 	}
 	function popTarget() {
-	  Dep.target = null;
+	  stack.pop();
+	  Dep.target = stack[stack.length - 1];
 	}
 
 	var id = 0;
@@ -5746,6 +5748,8 @@
 	    this.cb = cb;
 	    this.options = options;
 	    this.user = options.user;
+	    this.lazy = options.lazy;
+	    this.dirty = this.lazy;
 	    this.id = id++;
 	    this.deps = [];
 	    this.depsId = new Set();
@@ -5761,20 +5765,38 @@
 	        return obj;
 	      };
 	    }
-	    this.value = this.get();
+	    this.value = this.lazy ? void 0 : this.get();
 	  }
 	  return _createClass(Watcher, [{
 	    key: "get",
 	    value: function get() {
 	      pushTarget(this);
-	      var result = this.getter();
+	      var result = this.getter.call(this.vm);
 	      popTarget();
 	      return result;
 	    }
 	  }, {
 	    key: "update",
 	    value: function update() {
-	      queueWatcher(this);
+	      if (this.lazy) {
+	        this.dirty = true;
+	      } else {
+	        queueWatcher(this);
+	      }
+	    }
+	  }, {
+	    key: "evaluate",
+	    value: function evaluate() {
+	      this.value = this.get();
+	      this.dirty = false;
+	    }
+	  }, {
+	    key: "depend",
+	    value: function depend() {
+	      var i = this.deps.length;
+	      while (i--) {
+	        this.deps[i].depend();
+	      }
 	    }
 	  }, {
 	    key: "run",
@@ -6179,7 +6201,9 @@
 	  if (opts.data) {
 	    initData(vm);
 	  }
-	  if (opts.computed) ;
+	  if (opts.computed) {
+	    initComputed(vm);
+	  }
 	  if (opts.watch) {
 	    initWatch(vm);
 	  }
@@ -6201,6 +6225,47 @@
 	    proxy(vm, '_data', key);
 	  });
 	  observe(data);
+	}
+	function initComputed(vm) {
+	  var computed = vm.$options.computed;
+	  var watchers = vm._computedWatchers = {};
+	  for (var key in computed) {
+	    var userDef = computed[key];
+	    var getter = typeof userDef === 'function' ? userDef : userDef.get;
+	    watchers[key] = new Watcher(vm, getter, function () {}, {
+	      lazy: true
+	    });
+	    defineComputed(vm, key, userDef);
+	  }
+	}
+	function defineComputed(target, key, userDef) {
+	  var sharedPropertyDefinition = {
+	    enumerable: true,
+	    configurable: true,
+	    get: function get() {},
+	    set: function set() {}
+	  };
+	  if (typeof userDef === 'function') {
+	    sharedPropertyDefinition.get = createComputedGetter(key);
+	  } else {
+	    sharedPropertyDefinition.get = createComputedGetter(key);
+	    sharedPropertyDefinition.set = userDef.set;
+	  }
+	  Object.defineProperty(target, key, sharedPropertyDefinition);
+	}
+	function createComputedGetter(key) {
+	  return function () {
+	    var watcher = this._computedWatchers[key];
+	    if (watcher) {
+	      if (watcher.dirty) {
+	        watcher.evaluate();
+	      }
+	      if (Dep.target) {
+	        watcher.depend();
+	      }
+	      return watcher.value;
+	    }
+	  };
 	}
 	function initWatch(vm) {
 	  var watch = vm.$options.watch;

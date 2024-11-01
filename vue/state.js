@@ -1,6 +1,7 @@
 import { observe } from "./observer"
 import { nextTick } from "./util";
 import Watcher from "./observer/watcher";
+import Dep from "./observer/dep";
 
 export function initState(vm) {
   const opts = vm.$options
@@ -13,8 +14,9 @@ export function initState(vm) {
   if (opts.data) {
     initData(vm)
   }
+
   if (opts.computed) {
-    initComputed()
+    initComputed(vm)
   }
   if (opts.watch) {
     initWatch(vm)
@@ -42,7 +44,45 @@ function initData(vm) {
   })
   observe(data)
 }
-function initComputed() { }
+function initComputed(vm) {
+  let computed = vm.$options.computed
+  const watchers = vm._computedWatchers = {}
+  for(let key in computed) {
+    const userDef = computed[key]
+    const getter = typeof userDef === 'function' ? userDef : userDef.get
+    watchers[key]  = new Watcher(vm, getter, () => {}, { lazy: true })
+    defineComputed(vm, key, userDef)
+  }
+}
+function defineComputed(target, key, userDef) {
+  const sharedPropertyDefinition = {
+    enumerable: true,
+    configurable: true,
+    get: () => {},
+    set: () => {},
+  }
+  if (typeof userDef === 'function') {
+    sharedPropertyDefinition.get = createComputedGetter(key)
+  } else {
+    sharedPropertyDefinition.get = createComputedGetter(key)
+    sharedPropertyDefinition.set = userDef.set
+  }
+  Object.defineProperty(target, key, sharedPropertyDefinition)
+}
+function createComputedGetter(key) {
+  return function () {
+    const watcher = this._computedWatchers[key]
+    if (watcher) {
+      if (watcher.dirty) {
+        watcher.evaluate()
+      }
+      if (Dep.target) {
+        watcher.depend()
+      }
+      return watcher.value
+    }
+  }
+}
 function initWatch(vm) {
   let watch = vm.$options.watch
   for(let key in watch) {

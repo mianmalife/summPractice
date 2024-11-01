@@ -9,6 +9,8 @@ class Watcher {
     this.cb = cb
     this.options = options
     this.user = options.user
+    this.lazy = options.lazy
+    this.dirty = this.lazy
     this.id = id++
     this.deps = []
     this.depsId = new Set()
@@ -24,16 +26,30 @@ class Watcher {
         return obj
       }
     }
-    this.value = this.get()
+    this.value = this.lazy ? void 0 : this.get()
   }
   get() {
     pushTarget(this)
-    let result = this.getter()
+    let result = this.getter.call(this.vm)
     popTarget()
     return result
   }
   update() {
-    queueWatcher(this)
+    if (this.lazy) {
+      this.dirty = true
+    } else {
+      queueWatcher(this)
+    }
+  }
+  evaluate() {
+    this.value = this.get()
+    this.dirty = false
+  }
+  depend() {
+    let i = this.deps.length
+    while (i--) {
+      this.deps[i].depend()
+    }
   }
   run () {
     let newValue = this.get()

@@ -15,7 +15,6 @@ export function mergeOptions(parent, child) {
   strats.data = function (parentVal, childVal) {
     return childVal
   }
-  strats.computed = function () { }
 
   LIFECYCLE_HOOKS.forEach(hook => {
     strats[hook] = mergeHook
