@@ -1,4 +1,7 @@
 export function patch(oldVnode, vnode) {
+  if (!oldVnode) {
+    return createElm(vnode)
+  }
   if (oldVnode.nodeType === 1) {
     let el = createElm(vnode)
     let parentElm = oldVnode.parentNode
@@ -6,7 +9,7 @@ export function patch(oldVnode, vnode) {
     parentElm.removeChild(oldVnode)
     return el
   } else {
-    let el= vnode.el = oldVnode.el
+    let el = vnode.el = oldVnode.el
     if (oldVnode.tag !== vnode.tag) {
       return oldVnode.el.parentNode.replaceChild(createElm(vnode), oldVnode.el)
     }
@@ -23,7 +26,7 @@ export function patch(oldVnode, vnode) {
       updateChildren(oldChildren, newChildren, el)
     } else if (oldChildren.length > 0) {
       el.innerHTML = ''
-    } else if(newChildren.length > 0) {
+    } else if (newChildren.length > 0) {
       newChildren.forEach(vnode => {
         el.appendChild(createElm(vnode))
       })
@@ -63,21 +66,21 @@ function updateChildren(oldChildren, newChildren, parent) {
     } else if (!oldEndVnode) {
       oldEndVnode = oldChildren[--oldEndIndex]
     }
-    else if(isSameVnode(oldStartVnode, newStartVnode)) {
+    else if (isSameVnode(oldStartVnode, newStartVnode)) {
       patch(oldStartVnode, newStartVnode)
       oldStartVnode = oldChildren[++oldStartIndex]
       newStartVnode = newChildren[++newStartIndex]
-    } else if(isSameVnode(oldEndVnode, newEndVnode)) {
+    } else if (isSameVnode(oldEndVnode, newEndVnode)) {
       patch(oldEndVnode, newEndVnode)
       oldEndVnode = oldChildren[--oldEndIndex]
       newEndVnode = newChildren[--newEndIndex]
-    } else if(isSameVnode(oldStartVnode, newEndVnode)) {
+    } else if (isSameVnode(oldStartVnode, newEndVnode)) {
       patch(oldStartVnode, newEndVnode)
       parent.insertBefore(oldStartVnode.el, oldEndVnode.el.nextSibling)
       oldStartVnode = oldChildren[++oldStartIndex]
       newEndVnode = newChildren[--newEndIndex]
-    } else if(isSameVnode(oldEndVnode, newStartVnode)){
-      patch(oldEndVnode,newStartVnode)
+    } else if (isSameVnode(oldEndVnode, newStartVnode)) {
+      patch(oldEndVnode, newStartVnode)
       parent.insertBefore(oldEndVnode.el, oldStartVnode.el)
       oldEndVnode = oldChildren[--oldEndIndex]
       newStartVnode = newChildren[++newStartIndex]
@@ -95,14 +98,14 @@ function updateChildren(oldChildren, newChildren, parent) {
     }
   }
   if (newStartIndex <= newEndIndex) {
-    for(let i = newStartIndex; i <= newEndIndex; i++) {
-      let el = newChildren[newEndIndex + 1] == null ? null : newChildren[newEndIndex+1].el
+    for (let i = newStartIndex; i <= newEndIndex; i++) {
+      let el = newChildren[newEndIndex + 1] == null ? null : newChildren[newEndIndex + 1].el
       parent.insertBefore(createElm(newChildren[i]), el)
     }
   }
 
   if (oldStartIndex <= oldEndIndex) {
-    for(let i = oldStartIndex; i <= oldEndIndex; i++) {
+    for (let i = oldStartIndex; i <= oldEndIndex; i++) {
       let child = oldChildren[i]
       if (child != undefined) {
         parent.removeChild(child.el)
@@ -112,9 +115,22 @@ function updateChildren(oldChildren, newChildren, parent) {
 
 }
 
+function createComponent(vnode) {
+  let i = vnode.data
+  if ((i = i.hook) && (i = i.init)) {
+    i(vnode)
+  }
+  if (vnode.componentInstance) {
+    return true
+  }
+}
+
 export function createElm(vnode) {
   const { tag, data, key, children, text } = vnode
   if (typeof tag === 'string') {
+    if (createComponent(vnode)) {
+      return vnode.componentInstance.$el
+    }
     vnode.el = document.createElement(tag)
     updateProperties(vnode)
     children.forEach(child => {
@@ -130,7 +146,7 @@ function updateProperties(vnode, oldProps = {}) {
   let propteries = vnode.data || {}
   let el = vnode.el
 
-  for(let key in oldProps) {
+  for (let key in oldProps) {
     if (!propteries[key]) {
       el.removeAttribute(key)
     }
@@ -138,7 +154,7 @@ function updateProperties(vnode, oldProps = {}) {
 
   let newStyle = propteries.style || {}
   let oldStyle = oldProps.style || {}
-  for(let key in oldStyle) {
+  for (let key in oldStyle) {
     if (!newStyle[key]) {
       el.style[key] = ''
     }

@@ -11,21 +11,35 @@
   <div id="app" style="color:red; font-size:18px">
     <p style="font-weight: 700; color:rgb(104, 84, 123); font-size: 20px;">
       <span>haha</span>
-      <span>{{fullName}}</span>
+      <my-btn></my-btn>
+      <aa></aa>
+      <bb></bb>
     </p>
   </div>
   <script src="vue.js"></script>
   <script>
-    // Vue.mixin({
-    //   created: function a() {
-    //     console.log('a')
-    //   }
-    // })
-    // Vue.mixin({
-    //   created: function b() {
-    //     console.log('b')
-    //   }
-    // })
+    const vm1 = Vue.component("my-btn", {
+      data() {
+        return { btn: 'haha' }
+      },
+      template: '<button>hello {{btn}}</button>',
+      mounted() {
+        setTimeout(() => {
+          this.btn = 'heihei'
+        }, 2000)
+      },
+    })
+    Vue.component("aa", {
+      data() {
+        return { a: 'hehe' }
+      },
+      template: '<div>{{a}}</div>',
+      mounted() {
+        setTimeout(() => {
+          this.a = 'gg'
+        }, 2000)
+      },
+    })
     const vm = new Vue({
       el: '#app',
       data() {
@@ -35,27 +49,13 @@
           lastName: '二'
         }
       },
-      computed: {
-        fullName: function () {
-          console.log('计算属性回调')
-          return this.firstName + this.lastName
+      components: {
+        bb: {
+          template: '<div>bb</div>'
         }
-      }
-      // watch: {
-      //   "info.firstName": function (newValue, oldValue) {
-      //     console.log(newValue, oldValue)
-      //   }
-      // }
+      },
     })
-    vm.fullName
-    vm.fullName
-    setTimeout(() => {
-      vm.firstName = '王'
-    }, 2000)
-    // vm.info.firstName = 'lisi'
-    // setTimeout(() => {
-    //   vm.info.firstName = 'wmz'
-    // }, 2000)
+    console.log(vm)
   </script>
 </body>
 

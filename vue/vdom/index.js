@@ -1,6 +1,8 @@
+import { isReservedTag } from "../util";
+
 export function renderMixin(Vue) {
   Vue.prototype._c = function () {
-    return createElement(...arguments)
+    return createElement(this, ...arguments)
   }
   Vue.prototype._s = function (val) {
     return val == null ? '' : typeof val === 'object' ? JSON.stringify(val) : val;
@@ -16,20 +18,40 @@ export function renderMixin(Vue) {
   }
 }
 
-function createElement(tag, data = {}, ...children) {
-  return vnode(tag, data, data.key, children)
+function createElement(vm, tag, data = {}, ...children) {
+  if (isReservedTag(tag)) {
+    return vnode(tag, data, data.key, children)
+  } else {
+    const Ctor = vm.$options.components[tag]
+    return createComponent(vm, tag, data, children, Ctor)
+  }
+}
+
+function createComponent(vm, tag, data, children, Ctor) {
+  const baseCtor = vm.$options._base
+  if (typeof Ctor === 'object') {
+    Ctor = baseCtor.extend(Ctor)
+  }
+  data.hook = {
+    init(vnode) {
+      const child = vnode.componentInstance = new Ctor({})
+      child.$mount()
+    }
+  }
+  return vnode(`vue-component-${Ctor.cid}-${tag}`, data, data.key, undefined, undefined, { Ctor, children })
 }
 
 function createTextVnode(text) {
   return vnode(undefined, undefined, undefined, undefined, text)
 }
 
-function vnode(tag, data, key, children, text) {
+function vnode(tag, data, key, children, text, componentOptions) {
   return {
     tag,
     data,
     key,
     children,
-    text
+    text,
+    componentOptions
   }
 }

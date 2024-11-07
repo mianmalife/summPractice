@@ -12,8 +12,14 @@ export function mergeOptions(parent, child) {
   ]
 
   const strats = {}
-  strats.data = function (parentVal, childVal) {
-    return childVal
+  strats.components = function (parentVal, childVal) {
+    const res = Object.create(parentVal)
+    if (childVal) {
+      for (let key in childVal) {
+        res[key] = childVal[key]
+      }
+    }
+    return res
   }
 
   LIFECYCLE_HOOKS.forEach(hook => {
@@ -45,7 +51,11 @@ export function mergeOptions(parent, child) {
     if (strats[key]) {
       options[key] = strats[key](parent[key], child[key])
     } else {
-      options[key] = child[key]
+      if (child[key]) {
+        options[key] = child[key]
+      } else {
+        options[key] = parent[key]
+      }
     }
   }
   return options
@@ -82,7 +92,7 @@ if (Promise) {
   timerFunc = () => {
     textNode.textContent = 2
   }
-} else if (setImmediate){
+} else if (setImmediate) {
   timerFunc = () => {
     setImmediate(flushCallbacks)
   }
@@ -93,8 +103,20 @@ if (Promise) {
 }
 export function nextTick(cb) {
   callbacks.push(cb)
-  if(!pending) {
+  if (!pending) {
     timerFunc()
     pending = true
   }
 }
+
+function makeMap(str) {
+  const mapping = {}
+  const arr = str.split(',')
+  arr.forEach(item => {
+    mapping[item] = true
+  })
+  return key => mapping[key]
+}
+export const isReservedTag = makeMap(
+  'div,p,span,button,img,a,ul,li,ol,input,textarea,pre,i,h1,h2,h3,h4,h5,h6'
+)
