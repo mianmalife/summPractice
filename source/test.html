@@ -21,8 +21,41 @@
 </head>
 
 <body>
-  <button class="btn">新增</button>
-  <script src="./task.js"></script>
+  <button class="btn" onClick="handleAdd()">新增</button>
 </body>
+<script>
+  // 节流 -> 技能cd
+const throttle = (fn, wait) => {
+  let lastTime = null
+  return function(...args) {
+    const now = Date.now()
+    if (lastTime === null || now - lastTime > wait) {
+      lastTime = now
+      return fn.apply(this, args)
+    }
+  }
+}
+const btn = document.querySelector('.btn')
+function add() {
+  console.log(1, this)
+}
 
+// const handleAdd = throttle(add, 1000)
+
+// 防抖 -> 回城
+const debounce = (fn, wait) => {
+  let timer
+  return function(...args) {
+    console.log(args)
+    if(timer) {
+      clearTimeout(timer)
+    }
+    timer = setTimeout(function(){
+      timer = null
+      return fn.apply(this, args)
+    }, wait)
+  }
+}
+const handleAdd = debounce(add, 1000)
+</script>
 </html>

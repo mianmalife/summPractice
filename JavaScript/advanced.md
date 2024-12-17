@@ -48,3 +48,35 @@ function testMethod (a, b, c) {
 
 testMethod.myCall(12, 1, 2, 3)
 ```
+
+## 实现节流函数
+
+```js
+const throttle = (fn, wait) => {
+  let lastTime = null
+  return function(...args) {
+    const now = Date.now()
+    if (lastTime === null || now - lastTime > wait) {
+      lastTime = now
+      return fn.apply(this, args)
+    }
+  }
+}
+```
+
+## 实现防抖函数
+
+```js
+const debounce = (fn, wait) => {
+  let timer
+  return function(...args) {
+    if(timer) {
+      clearTimeout(timer)
+    }
+    timer = setTimeout(function(){
+      timer = null
+      return fn.apply(this, args)
+    }, wait)
+  }
+}
+```

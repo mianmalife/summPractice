@@ -65,6 +65,19 @@ export default defineConfig({
 
     socialLinks: [
       { icon: 'github', link: 'https://github.com/vuejs/vitepress' }
-    ]
+    ],
+    lastUpdated: {
+      text: '最后更新于'
+    },
+    search: {
+      provider: 'local'
+    },
+    docFooter: {
+      prev: '上一页',
+      next: '下一页'
+    },
+    outline: {
+      label: '页面导航'
+    }
   }
 })
