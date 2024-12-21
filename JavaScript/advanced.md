@@ -67,15 +67,14 @@ const throttle = (fn, wait) => {
 ## 实现防抖函数
 
 ```js
-const debounce = (fn, wait) => {
+const debounce = (fn, wait=0) => {
   let timer
   return function(...args) {
     if(timer) {
       clearTimeout(timer)
     }
-    timer = setTimeout(function(){
-      timer = null
-      return fn.apply(this, args)
+    timer = setTimeout(()=> {
+      fn.apply(this, args)
     }, wait)
   }
 }

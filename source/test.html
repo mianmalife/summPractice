@@ -21,7 +21,7 @@
 </head>
 
 <body>
-  <button class="btn" onClick="handleAdd()">新增</button>
+  <button class="btn">新增</button>
 </body>
 <script>
   // 节流 -> 技能cd
@@ -43,19 +43,19 @@ function add() {
 // const handleAdd = throttle(add, 1000)
 
 // 防抖 -> 回城
-const debounce = (fn, wait) => {
+const debounce = (fn, wait="500") => {
   let timer
   return function(...args) {
-    console.log(args)
     if(timer) {
       clearTimeout(timer)
     }
-    timer = setTimeout(function(){
-      timer = null
-      return fn.apply(this, args)
+    timer = setTimeout(() => {
+      console.log(this, '888s')
+      fn.apply(this, args)
     }, wait)
   }
 }
-const handleAdd = debounce(add, 1000)
+
+document.querySelector('.btn').onclick = debounce(add, 1000)
 </script>
 </html>
