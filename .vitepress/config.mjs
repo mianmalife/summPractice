@@ -29,7 +29,7 @@ export default defineConfig({
         {
           text: '手写类',
           items: [
-            { text: '实现常见方法', link: '/JavaScript/advanced' },
+            { text: '常见方法', link: '/JavaScript/advanced' },
             { text: '工具函数', link: '/JavaScript/tools' }
           ],
         }
