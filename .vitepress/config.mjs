@@ -13,10 +13,17 @@ export default defineConfig({
     nav: [
       { text: '首页', link: '/' },
       { text: 'Javascript', link: '/JavaScript/', activeMatch: '/JavaScript/' },
+      { text: 'CSS', link: '/css/', activeMatch: '/css/' },
       { text: 'Git', link: '/gitOperation/', activeMatch: '/gitOperation/' },
       { text: 'NodeJs', link: '/nodejs/', activeMatch: '/nodejs/' },
-      { text: 'CSS', link: '/css/', activeMatch: '/css/' },
-      { text: 'Examples', link: '/example/', activeMatch: '/example/' }
+      {
+        text: 'Others',
+        items: [{
+          text: 'Docker',
+          link: '/others/docker/',
+          activeMatch: '/others/docker/'
+        }]
+      }
     ],
     sidebar: {
       '/JavaScript/': [
@@ -54,11 +61,10 @@ export default defineConfig({
           { text: 'border边框', link: '/css/border' }
         ]
       }],
-      '/example/': [{
-        text: 'example',
+      '/others/docker/': [{
+        text: '常用命令',
         items: [
-          { text: 'Markdown Examples', link: '/example/' },
-          { text: 'Runtime API Examples', link: '/example/api-examples' }
+          { text: 'Docker基础', link: '/others/docker/' },
         ]
       }]
     },
