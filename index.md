@@ -10,10 +10,10 @@ hero:
   actions:
     - theme: brand
       text: JavaScript基础
-      link: /JavaScript/
+      link: /docs/JavaScript/
     - theme: alt
       text: JavaScript进阶
-      link: /JavaScript/advanced
+      link: /docs/JavaScript/advanced
 
 features:
   - title: 前端
