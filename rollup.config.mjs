@@ -3,10 +3,10 @@ import resolve from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
 
 export default {
-  input: "./vue/index.js",
+  input: "./docs/vue2/index.js",
   output: {
     name: "Vue",
-    file: './vue/dist/umd/vue.js',
+    file: './docs/vue/dist/umd/vue.js',
     format: 'umd',
     sourcemap: true
   },

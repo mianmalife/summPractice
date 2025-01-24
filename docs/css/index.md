@@ -1,7 +1,3 @@
-# css3渐变
-
-...
-
 ## 线性渐变
 
 模拟边框`border`:
@@ -40,54 +36,47 @@
 <div class="dashed"></div>
 ```
 
-## 其他
+## 实现三角形，梯形
 
-**Input**
+border可以模拟实现三角形，梯形
 
-```md
-::: info
-This is an info box.
-:::
+**三角形**
 
-::: tip
-This is a tip.
-:::
+```css
+/* 下三角 等边三角形 通过改变border-color不同方向的透明度即可 */
+.triangle-t {
+  width: 0px;
+  height: 0px;
+  border-width: 20px;
+  border-style: solid;
+  border-color: orange transparent transparent transparent;
+}
 
-::: warning
-This is a warning.
-:::
-
-::: danger
-This is a dangerous warning.
-:::
-
-::: details
-This is a details block.
-:::
+/* 等腰三角形 */
+.triangle-dy {
+  width: 0px;
+  height: 0px;
+  border-width: 30px 10px;
+  border-style: solid;
+  border-color: orange transparent transparent;
+}
 ```
 
-**Output**
+**梯形**
 
-::: info
-This is an info box.
-:::
+```css
+.triangle-tx {
+  margin: 50px;
+  width: 15px;
+  height: 15px;
+  border-width: 20px;
+  border-style: solid;
+  border-color: orange transparent transparent;
+}
+```
 
-::: tip
-This is a tip.
-:::
+## css sprite animations
 
-::: warning
-This is a warning.
-:::
+[点赞动画](http://www.baidu.com)
 
-::: danger
-This is a dangerous warning.
-:::
 
-::: details
-This is a details block.
-:::
-
-## More
-
-Check out the documentation for the [full list of markdown extensions](https://vitepress.dev/guide/markdown).

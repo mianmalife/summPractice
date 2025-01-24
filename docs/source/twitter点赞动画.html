@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>点赞</title>
+  <style>
+    * {margin: 0; padding: 0;}
+    html, body {
+      width: 100%;
+      height: 100%;
+      display: flex;;
+      justify-content: center;
+      align-items: center;
+    }
+    .dzBox {
+      margin-right: 10px;
+      border: 1px solid #ccc;
+      width: 55px;
+      height: 55px;
+      background-image: url('./image/heart.png');
+      background-repeat: no-repeat;
+      background-size: 1600px 55px;
+      cursor: pointer;
+    }
+    .input:checked + .dzBox {
+      animation: play 2s steps(29, jump-none) forwards !important;
+    }
+    @keyframes play {
+      from {
+        background-position: 0px 0px;
+      }
+      to {
+        background-position: -1545px 0px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <label for="checkbox">
+    <input id="checkbox" type="checkbox" class="input" hidden>
+    <div class="dzBox"></div>
+  </label>
+</body>
+</html>
