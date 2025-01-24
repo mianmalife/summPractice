@@ -77,6 +77,6 @@ border可以模拟实现三角形，梯形
 
 ## css sprite animations
 
-[点赞动画](http://www.baidu.com)
+[点赞动画](https://github.com/mianmalife/summPractice/blob/main/docs/source/twitter%E7%82%B9%E8%B5%9E%E5%8A%A8%E7%94%BB.html)
 
 
