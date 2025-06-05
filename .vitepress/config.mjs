@@ -45,7 +45,7 @@ export default defineConfig({
         text: '推送',
         items: [
           { text: '远程仓库地址设置与推送', link: '/docs/gitOperation/' },
-          { text: '...', link: '/docs/gitOperation/one' }
+          { text: '设置提交用户信息', link: '/docs/gitOperation/one' }
         ]
       }],
       '/docs/nodejs/': [{
