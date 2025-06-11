@@ -15,7 +15,6 @@ git remote -v
 
 ## 存在一个文件夹
 
-
 ```bash
 cd 文件夹
 git init
@@ -24,7 +23,7 @@ git commit -m 'xxx'
 git branch -M main
 git remote add origin git@github.com:xxx/yyy.git
 git push -u origin main
-````
+```
 
 
 ## 存在一个远程仓库
@@ -34,5 +33,14 @@ git push -u origin main
 git remote add origin git@github.com:xxx/yyy.git
 git branch -M main
 git push -u origin main
+```
+
+## 合并远程分支到本地分支
+
+
+```bash
+git pull 远程分支地址 分支名
+
+git push origin xxx
 ```
 
