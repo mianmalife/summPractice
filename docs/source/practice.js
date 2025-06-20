@@ -57,4 +57,8 @@ function noRe(arr) {
 }
 console.log(noRe(array1))
 
+function Test() {
+  console.log(this, 'this')
+}
+const t = new Test()
 // Map方式

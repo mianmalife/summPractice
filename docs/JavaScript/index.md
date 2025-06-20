@@ -19,3 +19,20 @@
 - let声明的是块级作业域
 - let声明存在TDZ(暂时性死区)，也就是说变量在声明初始化之前不能访问。
 - 重复声明的问题, var可以, let不可以。
+
+
+## 函数中this的指向
+
+| 调用方式          | 示例               | this的指向     |
+| ----------------- | ------------------ | -------------- |
+| 直接调用          | funcName()         | 全局对象       |
+| 对象调用          | obj.funcName()     | 前面的对象     |
+| call, apply, bind | funcName.call(ctx) | 第一个参数对象 |
+| 通过new调用       | new funcName()     | 新对象         |
+
+```js
+function Test(){
+  console.log(this) // Test {}
+}
+new Test()
+```
