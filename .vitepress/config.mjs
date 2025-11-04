@@ -48,6 +48,11 @@ export default defineConfig({
           { text: '设置提交用户信息', link: '/docs/gitOperation/one' },
           { text: '回退/储藏', link: '/docs/gitOperation/reset' }
         ]
+      }, {
+        text: '合并',
+        items: [
+          { text: '不同项目合并代码', link: '/docs/gitOperation/merge' },
+        ]
       }],
       '/docs/nodejs/': [{
         text: '基础',
