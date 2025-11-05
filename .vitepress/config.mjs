@@ -30,7 +30,7 @@ export default defineConfig({
         {
           text: '基础',
           items: [
-            { text: '基础语法', link: '/docs/JavaScript/' },
+            { text: '概览', link: '/docs/JavaScript/' },
           ],
         },
         {
